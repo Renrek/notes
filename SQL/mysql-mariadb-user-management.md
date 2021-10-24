@@ -45,4 +45,19 @@ GRANT ALL PRIVILEGES ON webdev.* TO 'username'@'192.168.1.25' WITH GRANT OPTION;
 - UPDATE- allow them to update table rows
 - WITH GRANT OPTION- allows them to grant or remove other users’ privileges
 
+## Other Useful Commands
+
+```SQL
+-- Reloads the grant table enabling the changes made without restarting server.
+FLUSH PRIVILEGES;
+
+-- Display the grants for a user specified by access location.
+SHOW GRANTS FOR 'username'@'localhost';
+
+-- Drops a users access completely.
+DROP USER 'username'@'localhost';
+
+-- Removes all privileges on a database level
+REVOKE ALL PRIVILEGES ON dbname.* FROM 'username'@'localhost';
+```
 [For more on Mysql Access](https://dev.mysql.com/doc/refman/5.7/en/grant.html)
