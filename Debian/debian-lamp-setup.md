@@ -1,5 +1,5 @@
 # LAMP setup on Debian
-_Note: due for review material may be dated_
+*Version: Debian 10 - Buster*
 
 Make sure to do the [Debian Base Configuration](https://github.com/Renrek/notes/blob/53442a63853252db4fd410f6985419578d15d8b3/Debian/debian-base-configuration.md#L22) first.
 

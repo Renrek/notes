@@ -1,70 +1,73 @@
 # Laravel LAMP setup on Debian
-Make sure to do the [Debian Base Configuration](https://github.com/Renrek/notes/blob/53442a63853252db4fd410f6985419578d15d8b3/Debian/debian-base-configuration.md#L22) first.
+*Version: Debian 10 - Buster*
 
+Make sure to do the [Debian Base Configuration](https://github.com/example/notes/blob/53442a63853252db4fd410f6985419578d15d8b3/Debian/debian-base-configuration.md#L22) first.
+
+This setup assumes that a new project is being setup on the server, then pushed to github. It is then pulled from github to be worked on, the deployed site is then updated by a git pull of the main branch. This can be automated by a cronjob as an option.
+
+
+## Open html port
+```shell 
+sudo ufw allow 80
+```
 ## Install base packages
 ```shell
-sudo apt update
 sudo apt install apache2
-sudo apt install wget lsb-release apt-transport-https ca-certificates
-sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-sudo echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php7.3.list
-sudo apt install php7.3
-php -v
-sudo apt install php7.3-cli php7.3-fpm php7.3-json php7.3-pdo php7.3-mysql php7.3-zip php7.3-gd  php7.3-mbstring php7.3-curl php7.3-xml php7.3-bcmath php7.3-json php7.3-zip
 sudo apt install mariadb-server mariadb-client
 sudo mysql_secure_installation
+sudo apt install php php-bcmath php-json php-mbstring php-mysql php-tokenizer php-xml php-zip libapache2-mod-php wget unzip
+sudo apt install nodejs npm git
+```
+## Install Composer
+```shell
+cd ~ && wget -O composer-setup.php https://getcomposer.org/installer
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+sudo composer self-update
 ```
 
+## Configure Apache
+
 ```shell
-sudo nano /etc/apache2/sites-available/renrek.com.conf
+sudo nano /etc/apache2/sites-available/example.com.conf
 ```
 ```Apache config
 <VirtualHost *:80>
 
     ServerAdmin admin@localhost
-    ServerName renrek.com
-    ServerAlias www.renrek.com
-    DocumentRoot /var/www/renrek.com/public
+    ServerName example.com
+    ServerAlias www.example.com
+    DocumentRoot /var/www/example.com/public
 
-    <Directory /var/www/renrek.com>
+    <Directory /var/www/example.com>
         AllowOverride all
         Require all granted
     </Directory>
 
-    ErrorLog ${APACHE_LOG_DIR}/renrek.com_error.log
-    CustomLog ${APACHE_LOG_DIR}/renrek.com_access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/example.com_error.log
+    CustomLog ${APACHE_LOG_DIR}/example.com_access.log combined
 
 </VirtualHost>
 ```
 
+## Initiate New Laravel Project
 ```shell
-sudo a2enmod rewrite proxy_fcgi setenvif
-sudo a2enconf php7.3-fpm
-sudo apt install git
-cd /var/www/renrek.com
-sudo apt install wget php-cli php-zip unzip
-cd ~ && wget -O composer-setup.php https://getcomposer.org/installer
-sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-sudo composer self-update
-source ~/.bashrc
-sudo chown -R brad:www-data /var/www
+sudo chown -R <username>:www-data /var/www
 cd /var/www
-composer create-project --prefer-dist laravel/laravel blog
-find /var/www/renrek.com/ -type f -exec chmod 664 {} \;    
-find /var/www/renrek.com/ -type d -exec chmod 775 {} \;
-sudo chown -R brad:www-data /var/www/renrek.com/
-cd /var/www/renrek.com
-chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
-composer update
-sudo a2ensite renrek.com && sudo a2dissite 000-default
-sudo service apache2 restart
-sudo apt install npm
-npm install
-ufw allow 80
+composer create-project --prefer-dist laravel/laravel example.com
 ```
 
-npm run dev??
+## Set File permissions
+```shell
+sudo find /var/www/example.com/ -type f -exec chmod 664 {} \;    
+sudo find /var/www/example.com/ -type d -exec chmod 775 {} \;
+sudo chown -R <username>:www-data /var/www/example.com/
+cd /var/www/example.com
+chgrp -R www-data storage bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache
+```
 
-
-
+## Enable Site
+```shell
+sudo a2ensite example.com && sudo a2dissite 000-default
+sudo service apache2 restart
+```
 
