@@ -39,7 +39,7 @@ nano renrek.com.conf
 </VirtualHost>
 ```
 
-### Alt configuration for review
+### Alt configuration for up for review
 ```Apache config
 <VirtualHost *:80>
     ServerAdmin example@me.com
@@ -64,6 +64,11 @@ sudo a2dissite 000-default
 ```
 
 ## Wrap up
+Open up ports:
+```shell
+ufw allow 80
+```
+
 Test configuration and reload apache2 process
 ```shell
 sudo apache2ctl configtest
