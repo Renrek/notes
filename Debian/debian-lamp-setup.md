@@ -39,24 +39,6 @@ nano renrek.com.conf
 </VirtualHost>
 ```
 
-### Alt configuration for up for review
-```Apache config
-<VirtualHost *:80>
-    ServerAdmin example@me.com
-    ServerName example.com
-    ServerAlias www.example.com
-    DocumentRoot /var/www/example.com/public
-
-    <Directory /var/www/example.com>
-        AllowOverride all
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/example.com_error.log
-    CustomLog ${APACHE_LOG_DIR}/example.com_access.log combined
-
-</VirtualHost>
-```
 ### Enable new virutal host
 ```shell
 sudo a2ensite renrek.com
