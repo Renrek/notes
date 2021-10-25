@@ -6,3 +6,9 @@
 ```shell 
 npm init --yes 
 ```
+
+```shell
+npm install create-react-app -g
+
+create-react-app my-app
+```
