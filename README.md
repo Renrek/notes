@@ -1,15 +1,16 @@
 # Notes
-This is not a limit of my knowledge but a way to recall information. There may be things that are omitted and that may be intentional.
+
+A living repository of notes that I can access anywhere, it used to be a private collection, now public to share with friends and collogues.
 
 ## Table of Contents
 
-- Composer
+- [Composer](https://github.com/Renrek/notes/blob/main/Composer)
     - [Composer Commands](https://github.com/Renrek/notes/blob/main/Composer/composer-commands.md)
 
 - Debian Linux
     - [Base Configuration](https://github.com/Renrek/notes/blob/main/Debian/debian-base-configuration.md)
     - [LAMP Setup](https://github.com/Renrek/notes/blob/main/Debian/debian-lamp-setup.md)
     - [SSL Installation](https://github.com/Renrek/notes/blob/master/Debian/ssl-installation-openssl.md)
-    
+
 - SQL
     - [MariaDB & MySQL user management](https://github.com/Renrek/notes/blob/main/SQL/mysql-mariadb-user-management.md)
