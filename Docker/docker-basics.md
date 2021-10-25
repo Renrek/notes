@@ -1,8 +1,11 @@
 # Docker Basics
 _Last tested 10-24-21_
 
-For the sake of this repository, I created a simple Express.js server to host a static webpage. 
 
+
+For the sake of this repository, I created a simple Express.js server to host a static webpage. 
+#### Requirements
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [Express Setup](https://github.com/Renrek/notes/blob/main/Express/express-basic-web-server.md)
 - [Static Content](https://github.com/Renrek/notes/blob/main/HTML)
 
@@ -20,7 +23,6 @@ WORKDIR /srv
 COPY . .
 RUN npm i
 CMD [ "npm", "run", "start"]
-
 ```
 
 #### Build Container
@@ -38,5 +40,5 @@ docker scan express-basic
 docker run -dp 8080:5000 express-basic
 ```
 
-#### View
-localhost:8080
+#### View content hosted within container
+[http://localhost:8080](http://localhost:8080)
