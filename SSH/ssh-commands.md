@@ -8,6 +8,13 @@ By calling eval you load the variables into your environment.
 eval $(ssh-agent)
 ```
 
+## While it is manual it makes it work....
+
+Windows seems to have issues so this was the only way I could get it to work currently.
+```shell
+Set-Service ssh-agent -StartupType Manual 
+```
+
 #### Windows
 ```powershell
 exec ssh-agent bash
