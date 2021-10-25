@@ -21,14 +21,13 @@ code .
 
 ##### server/server.js
 ```js
-
+/** ---------- SYSTEM ---------- **/
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 8081; // Researching this was awesome.
 
 /** ---------- MIDDLEWARE ---------- **/
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));
 app.use(express.static('server/public'));
 
 /** ---------- EXPRESS ROUTES ---------- **/
