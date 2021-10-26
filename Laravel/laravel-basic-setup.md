@@ -1,5 +1,6 @@
 # Larvel Basic Project Setup
 
+This process needs review, it is missing some setup steps.
 ```shell
 composer self-update
 composer global require laravel/installer
@@ -17,6 +18,8 @@ git commit -m "initial commit"
 php artisan serve
 ```
 
+
+Random sqlite notes that need a home
 ```shell
 create a new clean file
 sqlite3 name.db ".databases"
