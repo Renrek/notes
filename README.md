@@ -14,6 +14,7 @@ A living repository of notes that I can access anywhere. These notes used to be 
 - [Debian](https://github.com/Renrek/notes/blob/main/Debian)
     - [Base Configuration](https://github.com/Renrek/notes/blob/main/Debian/debian-base-configuration.md)
     - [LAMP Setup](https://github.com/Renrek/notes/blob/main/Debian/debian-lamp-setup.md)
+    - [Laravel LAMP](https://github.com/Renrek/notes/blob/main/Debian/debian-laravel-lamp-setup.md#L1)
     - [SSL Installation](https://github.com/Renrek/notes/blob/master/Debian/ssl-installation-openssl.md)
 
 - [Docker](https://github.com/Renrek/notes/blob/main/Docker)
