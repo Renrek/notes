@@ -1,6 +1,6 @@
 # Notes
 
-A living repository of notes that I can access anywhere, it used to be a private collection, now public to share with friends and collogues. I foresee this to grow quickly and I am attempting some order before it gets out of control.
+A living repository of notes that I can access anywhere. These notes used to be a private collection, and now public to share with friends and collogues. I foresee that this repository will grow quickly and I am attempting establish some order before it gets out of control. As I am copying old notes they are being refactoring to markdown as I go. Some are quick, while others require some testing to review relevance and if they are outdated.
 
 ## Table of Contents
 
