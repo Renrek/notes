@@ -36,6 +36,13 @@ docker build -t express-basic .
 docker scan express-basic
 ```
 
+#### Run container
+
+
+d = detatched
+
+p = ports folowed by port assignment external:internal
+
 ```shell
 docker run -dp 8080:5000 express-basic
 ```

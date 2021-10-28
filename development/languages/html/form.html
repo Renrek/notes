@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- Designed by Brad Johansen for Assessment 5 -->
+<html lang="en"><!-- Included language, did not validate without it -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="nofollow"><!-- Left it in, no reason to take it out. -->
+    <meta name="description" content="Order form for a magazine subscription">
+    <meta name="keywords" content="magazine, digital">
+    <title>Order Form</title>
+    <style>
+        /* A little something extra, again. */
+        body {
+            background-color: #788878;
+        }
+
+        #content {
+            border-style: solid;
+            border-color: #000000;
+            border-radius: 25px;
+            background-color: #ffffff;
+            width: 1000px;
+            margin: 0 auto;
+            overflow: auto;
+            padding: 15px;
+        }
+
+        fieldset {
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        sup {
+            color:red;
+        }
+
+        .column {
+            float: left;
+            width:50%;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            text-align: right;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="content">
+        <h1 style="text-align: center;">Digital Magazine Order Form</h1>
+        <!-- The form's action was never specified within the assignment document. -->
+        <form action="do_something.php" method="POST">
+            <div class="column">
+                <fieldset>
+                    <legend>Name</legend>
+                    <label for="firstName">First:</label>
+                    <input type="text" name="firstName" id="firstName" size="12"><br>
+                    <label for="lastName">Last:</label>
+                    <input type="text" name="lastName" id="lastName" size="25">
+                </fieldset>
+                <fieldset>
+                    <legend>Subscription Length</legend>
+                    <label for="oneYear">12 issues over 1 year</label>
+                    <input type="radio" name="length" id="oneYear" value="12" checked="checked"><br>
+                    <label for="twoYear">24 issues over 2 years</label>
+                    <input type="radio" name="length" id="twoYear" value="24">
+                </fieldset>
+                <fieldset>
+                    <legend>Contact Information</legend>
+                    <label for="phone">Phone Number<sup>*</sup>: </label>
+                    <input type="tel" name="phone" id="phone" required><br>
+                    <label for="email">Email<sup>*</sup>: </label>
+                    <input type="email" name="email" id="email" required><br>
+                    <!-- Good place for javascript to verify emails before submitting, however outside scope of assignment -->
+                    <label for="email">Verify Email<sup>*</sup>: </label>
+                    <input type="email" name="verify" id="verify" required>
+                </fieldset>  
+                <fieldset>
+                    <legend>Mailing Lists</legend>
+                    <input type="checkbox" name="choice" id="mailingList" checked>
+                    <label style="text-align:left;width:250px;" for="mailingList">Join our news mailing list.</label><br>
+                    <input type="checkbox" name="otherchoice" id="otherMailingList">
+                    <label style="text-align:left;width:250px;" for="mailingList">Join our special offers mailing list</label>
+                </fieldset>
+                <p><sup>*</sup> Indicates Required</p>
+            </div>
+            <div class="column">
+                <fieldset>
+                    <legend>Optional Information</legend>
+                    <label for="referralMethod">How did you find us?:</label>
+                    <select name="referralMethod" id="referralMethod">
+                        <option value="none" selected disabled hidden>Please Select an Option</option>
+                        <option value="ad">Advertisement</option>
+                        <option value="search">Web Search</option>
+                        <option value="verbal">Word of Mouth</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <br>
+                    <label style="text-align: left;padding-top: 10px;" for="comment">Comments:</label>
+                    <textarea name="comment" id="comment" cols="65" rows="10"></textarea>
+                </fieldset>
+            </div>
+            <input style="margin-top:10px;float:right;" type="submit" value="Place Order">
+        </form>
+    </div>
+</body>
+</html>

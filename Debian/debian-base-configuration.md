@@ -68,14 +68,14 @@ cat <username>_rsa.pub >> authorized_keys
 Only necessary if a virtual machine. It allows the host server access.
 
 ```Shell
-apt install qemu-guest-agent
+sudo apt install qemu-guest-agent
 ```
 
 
 ## Reboot
 Do this for good measure.
 ```shell
-systemctl reboot
+sudo systemctl reboot
 ```
 
 

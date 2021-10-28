@@ -2,7 +2,14 @@
 
 These examples are in a format that is used specificity for Express using PostgreSQL. The route naming however can be applied to any stack used.
 
-#### 
+
+#### Basics
+
+- Stick to lower case letters
+- Do not use spaces, use hyphens: managed-things
+- Do not use end in a slash: /api/managed-things/:id
+
+
 #### Collection
 
 Take notice of the plural noun "customers" within the endpoint route.
@@ -22,11 +29,11 @@ router.get('/api/customers/', (req, res) => {
 
   db.query(statement)
     .then( result => {
-      res.send(result.rows);
+        res.send(result.rows);
     })
     .catch(err => {
-      console.log('ERROR: Delete movie', err);
-      res.sendStatus(500)
+        console.log('ERROR: Delete movie', err);
+        res.sendStatus(500)
     })
 });
 }
@@ -53,11 +60,11 @@ router.get('/api/customers/:id', (req, res) => {
 
     db.query(statement, [ req.params.id ])
         .then( result => {
-        res.send(result.rows);
+            res.send(result.rows);
         })
         .catch(err => {
-        console.log('ERROR: Delete movie', err);
-        res.sendStatus(500)
+            console.log('ERROR: Delete movie', err);
+            res.sendStatus(500)
         })
     });
 }
