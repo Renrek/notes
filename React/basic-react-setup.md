@@ -1,46 +1,71 @@
 # React and Express installed together
-_needs refinement and cleanup_
+_current project 10/29/21_
 
-### Step 1 : Install create-react-app
+#### Create React App
 ```shell
 npx create-react-app name-of-app
-```
-
-### Step 2 : Install Express
-```shell
 cd name-of-app
-npm install express
+npm install redux
+npm install redux-saga
 npm install react-router-dom
+```
+#### Frontend directories
+```shell
+cd src
+mkdir app components hooks redux redux/reducers redux/sagas
+mv App* ../src/app
+cd ..
+touch src/redux/reducers/_root.reducer.js
+touch src/redux/sagas/_root.saga.js
+```
+#### file adjustment
+
+- src/index.js App import file path correction
+import App from './app/App';
+
+- src/app/App.js remove import logo fromj './logo.svg';
+
+-rename app.js to app.jsx
+#### Install Express
+```shell
+npm install express
 npm install nodemon --save-dev
 npm install dotenv
-mkdir server
-touch server/server.js 
 npm install axios
-code .
 ```
 
-##### server/server.js
+#### Create Server file structure
+```shell
+mkdir server
+mkdir server/modules server/routes
+touch server/server.js 
+code .
+```
+##### Add Boiler plate server code server/server.js
 ```js
 /** ---------- SYSTEM ---------- **/
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 8081; // Researching this was awesome.
+const SITE_URL = process.env.SITE_URL || ' http://localhost';
+const PORT = process.env.PORT || 5000;
 
 /** ---------- MIDDLEWARE ---------- **/
+app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(express.static('server/public'));
+app.use(express.static('build'));
 
 /** ---------- EXPRESS ROUTES ---------- **/
 
 /** ---------- START SERVER ---------- **/
 app.listen(PORT, () => {
-    console.log(`Server is Active - http://localhost:${PORT}`);
+    console.log(`Server is Active - ${SITE_URL}:${PORT}`);
 });
 
 ```
 
 
-##### package.json
+##### Add to package.json
 ```json
 "proxy": "http://localhost:8081",
 
@@ -63,13 +88,3 @@ npm run server
 npm run client
 ```
 
-
-## Router example
-
-```js
-
-```
-
-```js
-
-```
