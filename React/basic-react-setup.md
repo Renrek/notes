@@ -1,15 +1,17 @@
-# React and Express installed together
+# MERN or PERN base recipe
 _current project 10/29/21_
 
-#### Create React App
+#### Create app and install dependencies
 ```shell
 npx create-react-app name-of-app
 cd name-of-app
-npm install redux
+npm install redux react-redux
 npm install redux-saga
 npm install react-router-dom
+npm install redux-logger
 ```
-#### Frontend directories
+
+#### Create app directories and core files
 ```shell
 cd src
 mkdir app components hooks redux redux/reducers redux/sagas
@@ -20,7 +22,7 @@ touch src/redux/sagas/_root.saga.js
 touch src/redux/store.js
 ```
 
-_root.saga.js
+**File: src/redux/sagas/_root.saga.js**
 ```js
 import { all } from 'redux-saga/effects';
 // import exampleSaga from './example.saga';
@@ -32,7 +34,7 @@ export function* rootSaga(){
 }
 ```
 
-_root.reducer.js
+**File: src/redux/reducers/_root.reducer.js**
 ```js
 import { combineReducers } from "redux";
 // import exampleObject from './exampleObject.reducer';
@@ -44,7 +46,7 @@ const rootReducer = combineReducers({
 export default rootReducer;
 ```
 
-/src/redux/store.js
+**File: src/redux/store.js**
 ```js
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
@@ -68,14 +70,17 @@ sagaMiddleware.run(rootSaga);
 
 export default store;
 ```
-#### file adjustment
+**File adjustments**
 
-- src/index.js App import file path correction
-import App from './app/App';
+- File: src/index.css - Delete file
+- File: src/index.js - Remove css import;
+- File: src/index.js - Alter line - import App from './app/App';
+- File: src/app/App.css - Delete file';
+- File: src/app/App.js - Remove css import;
+- File: src/app/App.js - Delete line - import logo from './logo.svg';
+- File: src/app/App.js - Change extension - src/app/App.jsx
+- File: src/index.css - Delete file
 
-- src/app/App.js remove import logo fromj './logo.svg';
-
--rename app.js to app.jsx
 #### Install Express
 ```shell
 npm install express
@@ -128,13 +133,3 @@ app.listen(PORT, () => {
     "eject": "react-scripts eject"
   },
 ```
-
-### Step 3 : 
-
-##### Starting server & client
-
-```shell
-npm run server
-npm run client
-```
-
