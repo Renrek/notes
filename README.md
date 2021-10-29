@@ -6,6 +6,7 @@ A living repository of notes that I can access anywhere. These notes used to be 
 
 - [Angular](https://github.com/Renrek/notes/blob/main/Angular)
     - [Basic Angular Setup](https://github.com/Renrek/notes/blob/main/Angular/basic-angular-setup.md)
+
 - [C#](https://github.com/Renrek/notes/blob/main/C#)
 
 - [Composer](https://github.com/Renrek/notes/blob/main/Composer)
@@ -34,9 +35,10 @@ A living repository of notes that I can access anywhere. These notes used to be 
 - [Javascript](https://github.com/Renrek/notes/blob/main/Javascript)
    
 - [jQuery](https://github.com/Renrek/notes/blob/main/jQuery)
+    - [AJAX Example](https://github.com/Renrek/notes/blob/main/jQuery/ajax-example.md)
   
 - [Laravel](https://github.com/Renrek/notes/blob/main/Laravel)
-    - [Laravel Artisan Commands](https://github.com/Renrek/notes/blob/main/Laravel/laravel-artisan-commands.md#L1)
+    - [Laravel Artisan Commands](https://github.com/Renrek/notes/blob/main/Laravel/laravel-artisan-commands.md)
 
 - [Mac](https://github.com/Renrek/notes/blob/main/Mac)
     - [Homebrew set PATH](https://github.com/Renrek/notes/blob/main/Mac/homebrew-path.md#L1)
@@ -45,19 +47,24 @@ A living repository of notes that I can access anywhere. These notes used to be 
     - [Cheat Sheet](https://github.com/Renrek/notes/blob/main/MarkDown/format.md#L1)
 
 - [MERN](https://github.com/Renrek/notes/blob/main/MERN)
-    - []()
+    - Next
+
 - [Node](https://github.com/Renrek/notes/blob/main/Node)
-    -[]()
+    - [Basic Commands](https://github.com/Renrek/notes/blob/main/Node/node-npm-commands.md)
+    - [Update](https://github.com/Renrek/notes/blob/main/Node/update-node.md#L1)
+
 - [React](https://github.com/Renrek/notes/blob/main/React)
-    -[]()
+    -[Base Setup](https://github.com/Renrek/notes/blob/main/React/basic-react-setup.md)
+
 - [SQL](https://github.com/Renrek/notes/blob/main/SQL)
     - [MariaDB & MySQL user management](https://github.com/Renrek/notes/blob/main/SQL/mysql-mariadb-user-management.md)
-    -[]()
+    
+
 - [SQLite](https://github.com/Renrek/notes/blob/main/SQL)
-    -[]()
+    
 - [SSH](https://github.com/Renrek/notes/blob/main/SSH)
-    -[]()
+    
 - [Ubuntu](https://github.com/Renrek/notes/blob/main/Ubuntu)
-    -[]()
+    
 - [Unsplash](https://github.com/Renrek/notes/blob/main/Unsplash)
-    -[]()
+    
