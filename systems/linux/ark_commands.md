@@ -1,3 +1,0 @@
-enablecheats bosskatkiller
-cheat saveworld
-admincheat DestroyWildDinos
