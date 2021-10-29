@@ -1,5 +1,6 @@
-# MERN or PERN base recipe
-_current project 10/29/21_
+# Basic React - Express Recipe
+_Edited on - 10/29/21_
+
 
 #### Create app and install dependencies
 ```shell
