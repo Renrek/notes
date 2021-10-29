@@ -1,1 +1,0 @@
-git clone git@git.lan.renrek.com:/srv/git/stuff.git
