@@ -17,6 +17,56 @@ mv App* ../src/app
 cd ..
 touch src/redux/reducers/_root.reducer.js
 touch src/redux/sagas/_root.saga.js
+touch src/redux/store.js
+```
+
+_root.saga.js
+```js
+import { all } from 'redux-saga/effects';
+// import exampleSaga from './example.saga';
+
+export function* rootSaga(){
+    yield all([
+        // exampleSaga(),
+    ]);
+}
+```
+
+_root.reducer.js
+```js
+import { combineReducers } from "redux";
+// import exampleObject from './exampleObject.reducer';
+
+const rootReducer = combineReducers({
+    // exampleObject,
+});
+
+export default rootReducer;
+```
+
+/src/redux/store.js
+```js
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import logger from 'redux-logger';
+import rootReducer from './reducers/_root.reducer';
+import rootSaga from './sagas/_root.saga';
+
+const sagaMiddleware = createSagaMiddleware();
+
+// logger is only included while in development
+const middlewareList = process.env.NODE_ENV === 'development' ?
+  [sagaMiddleware, logger] :
+  [sagaMiddleware];
+
+const store = createStore(
+  rootReducer,
+  applyMiddleware(...middlewareList),
+);
+
+sagaMiddleware.run(rootSaga);
+
+export default store;
 ```
 #### file adjustment
 
