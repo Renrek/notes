@@ -179,3 +179,88 @@ function* registrationSaga() {
 
 export default registrationSaga;
 ```
+
+src\redux\sagas\user.saga.js
+
+```js
+import axios from 'axios';
+import { put, takeLatest } from 'redux-saga/effects';
+
+function* fetchUser() {
+  try {
+    const config = {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+    const response = yield axios.get('/api/user', config);
+    yield put({ type: 'SET_USER', payload: response.data });
+  } catch (error) {
+    console.log('User get request failed', error);
+  }
+}
+
+function* userSaga() {
+  yield takeLatest('FETCH_USER', fetchUser);
+}
+
+export default userSaga;
+```
+
+src\redux\sagas\login.saga.js
+
+```js
+import { put, takeLatest } from 'redux-saga/effects';
+import axios from 'axios';
+
+function* loginUser(action) {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+        yield axios.post('/api/user/login', action.payload, config);
+        yield put({ type: 'FETCH_USER' });
+    } catch (error) {
+        console.log('Error with user login:', error);
+    }
+}
+
+function* logoutUser(action) {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+        };
+    yield axios.post('/api/user/logout', config);
+    yield put({ type: 'UNSET_USER' });
+  } catch (error) {
+        console.log('Error with user logout:', error);
+  }
+}
+
+function* loginSaga() {
+    yield takeLatest('LOGIN', loginUser);
+    yield takeLatest('LOGOUT', logoutUser);
+}
+
+export default loginSaga;
+```
+
+src\redux\reducers\user.reducer.js
+```js
+const userReducer = (state = {}, action) => {
+    switch (action.type) {
+      case 'SET_USER':
+        return action.payload;
+      case 'UNSET_USER':
+        return {};
+      default:
+        return state;
+    }
+  };
+  
+  // user will be on the redux state at:
+  // state.user
+  export default userReducer;
+  
+```
