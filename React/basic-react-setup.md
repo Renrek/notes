@@ -93,7 +93,7 @@ npm install axios
 #### Create Server file structure
 ```shell
 mkdir server
-mkdir server/modules server/routes
+mkdir server/modules server/routes server/constants
 touch server/server.js 
 code .
 ```
