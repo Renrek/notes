@@ -309,3 +309,28 @@ const userReducer = (state = {}, action) => {
   export default userReducer;
   
 ```
+
+src\components\ProtectedRoute\ProtectedRoute.jsx
+
+```js
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import Home from '../../pages';
+export default ({ component, children, ...props }) => {
+
+  const user = useSelector((store) => store.user);
+
+  // Handle the different ways to pass a component
+  const ProtectedComponent = component || (() => children);
+
+  // Check if user is signed in and direct them Home if not.
+  return (
+    <Route {...props} >
+        { user.id ? <ProtectedComponent /> : <Home /> }
+    </Route>
+  );
+
+}
+```
