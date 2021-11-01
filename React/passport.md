@@ -144,6 +144,46 @@ module.exports = cookieSession({
   secure: false,
 });
 ```
+server\routes\user.router.js
+```js
+const express = require('express');
+const rejectUnauthenticated = require('../modules/rejectUnauthenticated');
+const encryption = require('../modules/encryption');
+const pool = require('../modules/pool');
+const strategy = require('../modules/strategy');
+
+const router = express.Router();
+
+router.get('/', rejectUnauthenticated, (req, res) => {
+    res.send(req.user); // Data was gathered by Passport
+});
+
+router.post('/register', (req, res) => {
+    const username = req.body.username;
+    const password = encryption.encryptPassword(req.body.password);
+
+    const statement = `INSERT INTO user (username, password)
+        VALUES ( ?, ? )`;
+
+    pool.query(statement, [username, password])
+        .then(() => res.sendStatus(201))
+        .catch((err) => {
+            console.log('User registration failed: ', err);
+            res.sendStatus(500);
+        });
+});
+
+router.post('/login', strategy.authenticate('local'), (req, res) => {
+    res.sendStatus(200);
+});
+
+router.post('/logout', (req, res) => {
+    req.logout(); // Passport
+    res.sendStatus(200);
+});
+
+module.exports = router;
+```
 
 add to server.js
 ```js
@@ -151,11 +191,16 @@ add to server.js
 const session = require('./modules/session');
 const passport = require('./modules/strategy');
 
+const userRouter = require('./routes/user.router');
+
 /** ---------- MIDDLEWARE ---------- **/
 app.use(session);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+/** ---------- EXPRESS ROUTES ---------- **/
+app.use('/api/user', userRouter);
 ```
 
 src\redux\sagas\registration.saga.js
