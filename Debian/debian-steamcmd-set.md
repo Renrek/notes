@@ -19,3 +19,5 @@ sudo ln -s /usr/games/steamcmd steamcmd
 ```
 
 
+?? sudo apt-get install lib32gcc1
+
