@@ -50,8 +50,8 @@ module.exports = {
 ```js
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const encryption = require('../modules/encryption');
-const pool = require('../modules/pool');
+const encryption = require('./encryption');
+const pool = require('./pool');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -60,8 +60,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     pool.query('SELECT * FROM user WHERE id = ?', [ id ])
         .then((result) => {
-            const user = result && result.rows && result.rows[0];
-    
+            const user = result[0];
             if (user) {
                 delete user.password; // remove password so it doesn't get sent
                 done(null, user);
@@ -81,7 +80,7 @@ passport.use(
     new LocalStrategy((username, password, done) => {
     pool.query('SELECT * FROM user WHERE username = ?', [ username ])
         .then((result) => {
-            const user = result && result.rows && result.rows[0];
+            const user = result[0];
             if (user && encryption.comparePassword(password, user.password)) {
                 // Found match
                 done(null, user);

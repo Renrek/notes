@@ -7,3 +7,4 @@ CREATE USER 'username'@localhost IDENTIFIED BY 'password';
 GRANT SELECT, DELETE, INSERT, UPDATE ON *.* TO 'username'@localhost IDENTIFIED BY 'password';
 
 ```
+SHOW GRANTS FOR 'username'@localhost
