@@ -1,5 +1,5 @@
 # Debian Base Configuration
-*Version: Debian 10 - Buster*
+*Version: Debian 11 - Bullseye*
 
 When installing debian I use the net install iso and install just the operating system. I intentionally manually install everything that I will use to ensure only what is needed is on the system.
 
