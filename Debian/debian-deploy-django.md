@@ -63,6 +63,20 @@ apachectl configtest
 systemclt reload apache2
 ```
 
+edit settings.py 
+
+
+```python
+STATIC_ROOT = "/var/www/django/static/"
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+#    BASE_DIR / 'static',
+]
+```
+
+python3 manage.py collectstatic
+
 a2enmod wsgi
 
 apache2ctl -M
