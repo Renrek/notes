@@ -165,3 +165,5 @@ python manage.py check
 ```shell
 python manage.py sqlmigrate polls 0001
 ```
+
+Show package location:`python -c "import django; print(django.__path__)"`
