@@ -84,3 +84,6 @@ cat <username>_rsa.pub >> authorized_keys
 `hostnamectl` Show info
 `hostnamectl set-hostname thename` Set the hostname
 `landscape-sysinfo`
+
+lock username's account `sudo usermod -L username`
+unlock username's account `sudo usermod -U username`
