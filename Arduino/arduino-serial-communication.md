@@ -33,15 +33,17 @@ void loop(){
 
 void parseCommand(String com){
     if(com == "send"){
-        // Output A
+        // Output = A
         Serial.write(0x41);
         Serial.write("\n");
         
-    } else if (com == "test"){
-        // Output 0110 0001
+    } else if (com == "oct"){
+        // Output = 141
         Serial.println('a', OCT);
+    } else if (com == "bin"){
+        // Output = 0110 0001
+        Serial.println('a', BIN);
     }
-    
 }
 ```
 
