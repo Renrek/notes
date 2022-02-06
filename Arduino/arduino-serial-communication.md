@@ -12,6 +12,7 @@ Serial.begin(baud)
 
 ##### Examples
 ```C++
+// listener.ino
 
 String command;
 
@@ -32,18 +33,23 @@ void loop(){
 }
 
 void parseCommand(String com){
-    if(com == "send"){
-        // Output = A
-        Serial.write(0x41);
-        Serial.write("\n");
-        
-    } else if (com == "oct"){
-        // Output = 141
-        Serial.println('a', OCT);
-    } else if (com == "bin"){
-        // Output = 0110 0001
-        Serial.println('a', BIN);
+    if ( com == "list" ){
+        // List available commands
+        Serial.print("Commands available: ");
+        Serial.print("send ");
+        Serial.println();
+    } else if ( com == "send" ){
+        // Send readings 
+        Serial.write("Sent");
+        Serial.write("\r\n"); 
+    } else {
+        // Fail
+        Serial.print("Command \"");
+        Serial.print(com);
+        Serial.print("\" not recognized, use command \"list\" for available commands");
+        Serial.println();
     }
+    
 }
 ```
 
