@@ -99,7 +99,7 @@ passport.use(
 module.exports = passport;
 ```
 
-**File: server/modules/authentication.js**
+**File: server/modules/rejectUnauthenticated.js**
 
 ```js
 const rejectUnauthenticated = (req, res, next) => {
