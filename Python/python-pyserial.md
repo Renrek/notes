@@ -3,8 +3,11 @@
 Serial communication I use to communicate to microcontrollers.
 
 [Github](https://github.com/bakercp/PacketSerial)
+
 [Webpage](https://pyserial.readthedocs.io/)
+
 [Arduino](https://create.arduino.cc/projecthub/ansh2919/serial-communication-between-python-and-arduino-e7cce0)
+
 #### Installation
 ```shell
 pip3 install pyserial
@@ -13,7 +16,6 @@ pip3 install pyserial
 Show available ports
 ```shell
 python3 -m serial.tools.list_ports
-python3 -m serial.tools.miniterm
 ```
 
 ```python
