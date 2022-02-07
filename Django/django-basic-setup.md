@@ -23,6 +23,10 @@ create a temperaary virtual environment to create tidy package this is due to th
 1. `code .`
 
 ----
+### Base - static files - bootstrap - 
+
+- create core html
+----
 ### Add the ability to read environmentals
 `pip install django-environ`
 
@@ -135,45 +139,46 @@ urlpatterns = [
 1. `python manage.py migrate`
 
 
+## Create Core pages
 
-## Running Dev Server
-```shell
-python manage.py runserver 8080
-```
-
-## Create App
-
+Core pages are for basic pages such as about us, home, etc
 
 ```shell
-python manage.py startapp nameofapp
+python manage.py startapp core
 ```
 
 
-nameofapp/views.py
+core/views.py
 ```python
-from django.http import HttpResponse
+from django.shortcuts import render
+from django.contrib import messages
 
+def home(request):
+    messages.info(request, "Message example")
+    context = {}
+    return render(request, 'core/index.html', context)
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the nameofapp's index.")
+def dashboard(request):
+    context = {}
+    return render(request, 'core/dashboard.html', context)
 ```
 
 
 #### Create File
 
 ```shell
-touch nameofapp/urls.py
+touch core/urls.py
 ```
 
 
-nameofapp/urls.py
+core/urls.py
 ```python
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.home, name="home"),
+    path('accounts/profile/', views.dashboard, name="dashboard"),
 ]
 ```
 
@@ -245,6 +250,12 @@ python manage.py makemigrations nameofapp
 python manage.py migrate
 ```
 
+
+
+## Running Dev Server
+```shell
+python manage.py runserver 8080
+```
 
 
 
