@@ -6,26 +6,28 @@ creates a project called "base" used as a template for other works.
 #### Create work space
 create a temperaary virtual environment to create tidy package this is due to the the venv file not moving nice.
 
-python -m venv venv
-source venv/Scripts/activate
-pip install Django
-django-admin startproject base
-pip freeze > requirements.txt
-mv requirements.txt base
-deacivate
-rmdir -R venv
+##### Creation
+1. `python -m venv venv`
+1. `source venv/Scripts/activate`
+1. `pip install Django`
+1. `django-admin startproject base`
+1. `pip freeze > requirements.txt`
+1. `mv requirements.txt base`
+1. `deacivate`
+1. `rmdir -R venv`
 
-python -m venv venv
-source venv/Scripts/activate
-pip install -r requirements.txt
-code .
+##### Development
+1. `python -m venv venv`
+1. `source venv/Scripts/activate`
+1. `pip install -r requirements.txt`
+1. `code .`
 
-pip install django-environ
+----
+### Add the ability to read environmentals
+`pip install django-environ`
 
 ##### base > settings.py
-```python
-TIME_ZONE = 'America/Chicago'
-```
+
 ```python
 import environ
 
@@ -55,10 +57,16 @@ Note: Create at root of directory
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 ```
-
-#### Install allauth
+----
+### Change Timezone
+```python
+TIME_ZONE = 'America/Chicago'
+```
+----
+### Install allauth
 
 `pip install django-allauth`
+
 [Allauth Docs](https://django-allauth.readthedocs.io/en/latest/installation.html)
 
 ##### Add to settings.py
@@ -123,8 +131,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 ]
 ```
-`pip freeze > requirements.txt`
-`python manage.py migrate`
+1. `pip freeze > requirements.txt`
+1. `python manage.py migrate`
 
 
 
@@ -134,7 +142,7 @@ python manage.py runserver 8080
 ```
 
 ## Create App
- - Creates a boiler plate directory 
+
 
 ```shell
 python manage.py startapp nameofapp
