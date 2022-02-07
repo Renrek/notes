@@ -54,6 +54,7 @@ MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Configured for bootstrap classes
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
         messages.INFO: 'alert-info',
@@ -169,7 +170,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 pip freeze > requirements.txt
 
 #### .env
-```ini
+```env
 DEBUG=True
 SECRET_KEY=
 
@@ -257,6 +258,8 @@ SOCIALACCOUNT_PROVIDERS = {
 ```
 ##### base > urls.py
 ```python
+from django.urls import path, include
+
 urlpatterns = [
     # Add this path
     path('accounts/', include('allauth.urls')),
@@ -359,22 +362,27 @@ urlpatterns = [
 mysite/setting.py
 ```python
 INSTALLED_APPS = [
-    'nameofapp.apps.nameofappConfig',
+    # Site apps
+    'core.apps.CoreConfig',
+
+    # Core apps - came with install
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Used for allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 ```
 
-
-
-
-
 ## Running Dev Server
 ```shell
-python manage.py runserver 8080
+python manage.py runserver
 ```
-
