@@ -4,7 +4,7 @@ Goal: Have this script as a chron job and automate sensor data to database stora
 
 TODO: Add error catching along with logging events
 
-[Arduino Micro Controller listener example](https://github.com/Renrek/notes/blob/9722f0ee8ed042a70f3bfeda901df314a88e49e8/Arduino/arduino-serial-communication.md#L1)
+[Arduino Micro Controller listener example]()
 
 ## Files
 ###### governor.py

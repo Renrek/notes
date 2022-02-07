@@ -1,43 +1,136 @@
 # Django Basic Setup
 Note: based on tutorial from Django's site, condensed personal notes
 
-## Setup Virtual Environment
-```shell
+creates a project called "base" used as a template for other works.
+
+#### Create work space
+create a temperaary virtual environment to create tidy package this is due to the the venv file not moving nice.
+
 python -m venv venv
-. venv/Scripts/activate
+source venv/Scripts/activate
+pip install Django
+django-admin startproject base
+pip freeze > requirements.txt
+mv requirements.txt base
+deacivate
+rmdir -R venv
 
-
-```
-`pip freeze >> requirements.txt` will create a list of installed packages
-
-`pip install -r requirements.txt` will install from the requirements.txt
-
-## Installation
- - This is the recommended way to install Django.
-```shell
-python -m pip install Django
-```
-
- - Version check
-```shell
-python -m django --version
-```
-
-## Create project
-```shell
-django-admin startproject nameofproject
-cd nameofproject
+python -m venv venv
+source venv/Scripts/activate
+pip install -r requirements.txt
 code .
+
+pip install django-environ
+
+##### base > settings.py
+```python
+TIME_ZONE = 'America/Chicago'
 ```
+```python
+import environ
+
+# Initialise environment variables goes after BASE_DIR declaration
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')
+```
+pip freeze > requirements.txt
+
+#### .env
+```ini
+DEBUG=True
+SECRET_KEY=
+
+DATABASE_NAME=mysql
+DATABASE_USER=alice
+DATABASE_PASS=supersecretpassword
+
+GOOGLE_CLIENT_ID=
+GOOGLE_SECRET=
+GOOGLE_KEY=
+```
+Note: Create at root of directory
+
+##### Edit settings.py
+```python
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
+```
+
+#### Install allauth
+
+`pip install django-allauth`
+[Allauth Docs](https://django-allauth.readthedocs.io/en/latest/installation.html)
+
+##### Add to settings.py
+```python
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend' # Non production!
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email' 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
+
+AUTHENTICATION_BACKENDS = [
+    ...
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    ...
+]
+
+INSTALLED_APPS = [
+    # Site apps
+    
+    # Core apps - came with install
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Used for allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': env('GOOGLE_CLIENT_ID'),
+            'secret': env('GOOGLE_SECRET'),
+            'key': env('GOOGLE_KEY')
+        }
+    }
+}
+```
+##### base > urls.py
+```python
+urlpatterns = [
+    # Add this path
+    path('accounts/', include('allauth.urls')),
+]
+```
+`pip freeze > requirements.txt`
+`python manage.py migrate`
+
+
 
 ## Running Dev Server
 ```shell
 python manage.py runserver 8080
-```
-## Edit Settings
-nameofproject/settings.py
-```python
-TIME_ZONE = 'America/Chicago'
 ```
 
 ## Create App
