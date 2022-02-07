@@ -23,9 +23,133 @@ create a temperaary virtual environment to create tidy package this is due to th
 1. `code .`
 
 ----
-### Base - static files - bootstrap - 
+### Base Files
 
-- create core html
+1. `mkdir templates`
+1. `mkdir static`
+1. `mkdir static/css static/img static/js`
+1. `touch static/css/main.css static/img/.keep static/js/.keep`
+1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
+
+base/settings.py
+```python
+TEMPLATES = [
+    {
+        # Add this line to templates
+        'DIRS': [ BASE_DIR / 'templates' ],
+        
+    },
+]
+
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static' # Comment out this line for production then run static command
+]
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+}
+```
+
+templates/main.html
+```html
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title%}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="navigation">
+        {% include 'navbar.html' %}
+    </div>
+    <div class="center">
+        {% include 'messages.html' %}
+        {% block content %}
+        <!-- Things go here -->
+        {% endblock content %}
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</body>
+</html>
+```
+
+templates/footer.html
+```html
+<div class="center">
+    <hr>
+    <div class="container">
+        <div class="row justify-content-center">
+            &copy; Copyright 
+            <script>document.write(new Date().getFullYear())</script>
+           Stuff goes here
+        </div>
+    </div>
+</div>
+```
+
+templates/messages.html
+```html
+{% if messages %}
+{% for message in messages %}
+<div class="container-fluid p-0">
+  <div class="alert {{ message.tags }}" role="alert" >
+    {{ message }}
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+```
+
+templates/navbar.html
+```html
+{% load account %}
+<div class="center">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h2>Logo HERE</h2>
+            </div>
+            <div class="col-8">
+                <nav class="navbar navbar-expand-md">
+                    <ul class="navbar-nav ">
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link">Home</a>
+                        </li>
+                        
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>   
+            </div>
+        </div>
+    </div>
+</div>
+```
 ----
 ### Add the ability to read environmentals
 `pip install django-environ`
@@ -166,10 +290,41 @@ def dashboard(request):
 
 #### Create File
 
-```shell
-touch core/urls.py
-```
+1. `mdir core/templates core/templates/core core/templates/account core/templates/socialaccount`
+1. `touch core/urls.py core/templates/core/index.html core/templates/core/dashboard.html`
 
+
+##### core/templates/core/index.html
+```html
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %} - Home{% endblock %}
+{% block content %}
+    <h1>Home</h1>
+
+    <div style="margin:auto; width: 321px;">
+        The following links are just examples of how to access account pieces.
+        <a class="nav-link" href="{% url 'account_signup' %}">Sign up</a>
+        <a class="nav-link" href="{% url 'socialaccount_connections' %}">connect</a>
+    </div>
+{% endblock content %}
+```
+##### core/templates/core/dashboard.html
+```html
+<!-- TODO Move dashboard to app -->
+{% extends 'main.html' %}
+{% load static %}
+{% block title %} - Dashboard{% endblock %}
+{% block content %}
+    <p>dashboard</p>
+    <div>
+        {% if request.user.is_authenticated %}
+        <p>Hello {{ request.user }}</p>
+        {% endif %}
+    </div>
+{% endblock content %}
+```
 
 core/urls.py
 ```python
@@ -183,54 +338,21 @@ urlpatterns = [
 ```
 
 
-nameofproject/urls.py
+base/urls.py
 ```python
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('nameofapp/', include('nameofapp.urls')),
     path('admin/', admin.site.urls),
-]
+    path('', include('core.urls')),
+    path('accounts/', include('allauth.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
 
-## Database ORM
 
-#### Initial migration
-If you are using the user feature, it will install a user table.
-```shell
-python manage.py migrate
-```
-#### Create admin user
-```shell
-python manage.py createsuperuser
-```
-
-nameofapp/models.py
-```python
-import datetime
-
-from django.db import models
-from django.utils import timezone
-
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
-    def __str__(self):
-        return self.question_text
-    def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-    def __str__(self):
-        return self.choice_text
-```
-
-#### activate models 
 mysite/setting.py
 ```python
 INSTALLED_APPS = [
@@ -245,10 +367,6 @@ INSTALLED_APPS = [
 ```
 
 
-```python
-python manage.py makemigrations nameofapp
-python manage.py migrate
-```
 
 
 
@@ -257,25 +375,3 @@ python manage.py migrate
 python manage.py runserver 8080
 ```
 
-
-
-
-
-#### Notes of mention
-```python
-python -c "import django; print(django.__path__)"
-```
-```python
-python manage.py shell
-```
-checks for migrate issues
-
-```python
-python manage.py check
-```
-#shows sql code
-```shell
-python manage.py sqlmigrate polls 0001
-```
-
-Show package location:`python -c "import django; print(django.__path__)"`
