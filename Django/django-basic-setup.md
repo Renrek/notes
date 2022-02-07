@@ -32,7 +32,10 @@ create a temperaary virtual environment to create tidy package this is due to th
 1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
 
 base/settings.py
+
 ```python
+from django.contrib.messages import constants as messages
+
 TEMPLATES = [
     {
         # Add this line to templates
