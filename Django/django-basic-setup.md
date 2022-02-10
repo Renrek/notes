@@ -1,5 +1,5 @@
 # Django Basic Setup
-Note: based on tutorial from Django's site, condensed personal notes
+Note: Needs another passthrough, to clean it up and reorder some steps
 
 creates a project called "base" used as a template for other works.
 
