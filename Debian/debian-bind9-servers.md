@@ -1,4 +1,7 @@
-# Debian Bind9 server
+# Debian Bind9 Server Setup
+*Last tested on debian 11*
+
+This confguration creates a pair of DNS servers for a local network.
 
 ## Setup Master Name Server
 #### Install Packages 
