@@ -1,7 +1,4 @@
 # Django Basic Setup
-Note: Needs another passthrough, to clean it up and reorder some steps
-
-creates a project called "base" used as a template for other works.
 
 #### Create work space
 create a temperaary virtual environment to create tidy package this is due to the the venv file not moving nice.
@@ -13,21 +10,41 @@ create a temperaary virtual environment to create tidy package this is due to th
 1. `source venv/Scripts/activate`
 1. `pip install Django`
 1. `django-admin startproject base`
+1. `pip install django-environ`
 
-move django-template/base/* to django-template
+Move files within the base directory to root directory, the overwrite of base is intentional
 
-### Base Files
-
+1. `python manage.py startapp core`
 1. `mkdir templates static`
-1. `mkdir static/css static/img static/js`
+1. `mkdir static/css static/img static/js .gitignore`
 1. `touch static/css/main.css static/img/.keep static/js/.keep`
+1. `mkdir core/templates core/templates/core`
+1. `touch core/urls.py core/signals.py core/templates/core/index.html core/templates/core/profile.html`
+1. `touch .env_template`
 1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
 1. `code .`
+
+.gitignore
+```text
+venv
+__pycache__
+*.pyc
+*.sqlite3
+.env
+```
 
 base/settings.py
 
 ```python
 from django.contrib.messages import constants as messages
+import environ
+
+# Initialise environment variables goes after BASE_DIR declaration
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')
+
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
 
 TEMPLATES = [
     {
@@ -55,6 +72,19 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
 }
+
+INSTALLED_APPS = [
+    # Core apps - came with install
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Site apps
+    'core.apps.CoreConfig',
+]
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -104,15 +134,17 @@ templates/footer.html
 
 templates/messages.html
 ```html
-{% if messages %}
-{% for message in messages %}
-<div class="container-fluid p-0">
-  <div class="alert {{ message.tags }}" role="alert" >
-    {{ message }}
+<div class="container my-2">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="container-fluid p-0">
+    <div class="alert {{ message.tags }}" role="alert" >
+      {{ message }}
+    </div>
   </div>
+  {% endfor %}
+  {% endif %}
 </div>
-{% endfor %}
-{% endif %}
 ```
 
 templates/navbar.html
@@ -121,7 +153,7 @@ templates/navbar.html
   <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Renrek's Repository</a>
+        <a class="navbar-brand" href="#">LOGO</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -130,6 +162,15 @@ templates/navbar.html
             <li class="nav-item">
               <a href="{% url 'home' %}" class="nav-link">Home</a>
             </li>
+            {% if not user.is_authenticated%}
+            <li class="nav-item">
+              <a href="{% url 'login' %}" class="nav-link">Login</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a href="{% url 'logout' %}" class="nav-link">Log Out</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -137,43 +178,12 @@ templates/navbar.html
   </div>
 </div>
 ```
-----
-### Add the ability to read environmentals
-`pip install django-environ`
 
-##### base > settings.py
-
-```python
-import environ
-
-# Initialise environment variables goes after BASE_DIR declaration
-env = environ.Env()
-environ.Env.read_env(BASE_DIR / '.env')
-```
-1. `touch .env .env_template`
-
-#### .env_template
+.env_template
 ```env
 DEBUG=True
-SECRET_KEY=
+SECRET_KEY=replace_me_with_something_long_and_randomized
 ```
-Note: Create at root of directory
-
-##### Edit settings.py
-```python
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
-```
-
-
-## Create Core pages
-
-Core pages are for basic pages such as about us, home, etc
-
-```shell
-python manage.py startapp core
-```
-
 
 core/views.py
 ```python
@@ -191,29 +201,25 @@ def profile(request):
 ```
 
 
-#### Create File
-
-1. `mkdir core/templates core/templates/core`
-1. `touch core/urls.py core/templates/core/index.html core/templates/core/profile.html`
-
-
-##### core/templates/core/index.html
+core/templates/core/index.html
 ```html
 {% extends 'main.html' %}
 {% load static %}
-{% block title %} - Home{% endblock %}
+{% block title %}Home{% endblock %}
 {% block content %}
-    <h1>Home</h1>
+    <div class="container">
+        <h1>Home</h1>
+        <p>{{ user.email }}</p>
+    </div>
 {% endblock content %}
 ```
-##### core/templates/core/profile.html
+core/templates/core/profile.html
 ```html
-<!-- TODO Move dashboard to app -->
 {% extends 'main.html' %}
 {% load static %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-    <p>dashboard</p>
+    <p>profile</p>
     <div>
         {% if request.user.is_authenticated %}
         <p>Hello {{ request.user }}</p>
@@ -246,38 +252,71 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
 
-mysite/setting.py
+
+core/signals.py
 ```python
-INSTALLED_APPS = [
-    # Core apps - came with install
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from django.dispatch import receiver
+from django.contrib import messages
 
-    # Site apps
-    'core.apps.CoreConfig',
-]
+@receiver(user_logged_in)
+def sig_user_logged_in(sender, user, request, **kwargs):
+    messages.info(request, "You have successfully logged in")
+
+@receiver(user_logged_out)
+def sig_user_logged_out(sender, user, request, **kwargs):
+    messages.info(request, "You have logged out")
+
+@receiver(user_login_failed)
+def sig_user_login_failed(sender, credentials, request, **kwargs):
+    messages.error(request, "Failed to login")
 ```
 
-touch .gitignore
+core/models.py
+```python
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-```git
-venv
-__pycache__
-*.pyc
-*.sqlite3
-.env
+class User(AbstractUser):
+    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+    fav_beer = models.BooleanField(default=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = [ 'username', ]
+    EMAIL_FIELD = 'email'
 ```
-git init
-git add .
-git commit -m "initial commit"
 
+core/admin.py
+```python
+from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin
+from .models import User
 
-## Running Dev Server
-```shell
-migrate
-python manage.py runserver
+admin.site.register(User, UserAdmin)
+admin.site.unregister(Group)
 ```
+
+core/apps.py
+```python
+from django.apps import AppConfig
+
+
+class CoreConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'core'
+
+    def ready(self):
+        import core.signals
+
+```
+
+
+
+1. `git init`
+1. `git add .`
+1. `git commit -m "initial commit"`
+1. `python manage.py makemigrations`
+1. `python manage.py migrate`
+1. `python manage.py runserver`
+1. `python manage.py createsuperuser`
