@@ -7,22 +7,29 @@ creates a project called "base" used as a template for other works.
 create a temperaary virtual environment to create tidy package this is due to the the venv file not moving nice.
 
 ##### Creation
-1. `mkdir django-template`
-1. `cd django-template`
 1. `python -m venv venv`
 1. `source venv/Scripts/activate`
 1. `pip install Django`
 1. `django-admin startproject base`
+1. `pip freeze > requirements.txt`
+1. `mv requirements.txt base`
+1. `deacivate`
+1. `rmdir -R venv`
 
-move django-template/base/* to django-template
+##### Development
+1. `python -m venv venv`
+1. `source venv/Scripts/activate`
+1. `pip install -r requirements.txt`
+1. `code .`
 
+----
 ### Base Files
 
-1. `mkdir templates static`
+1. `mkdir templates`
+1. `mkdir static`
 1. `mkdir static/css static/img static/js`
 1. `touch static/css/main.css static/img/.keep static/js/.keep`
 1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
-1. `code .`
 
 base/settings.py
 
@@ -55,14 +62,7 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
 }
-
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-TIME_ZONE = 'America/Chicago'
-
 ```
-
 
 templates/main.html
 ```html
@@ -78,11 +78,15 @@ templates/main.html
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    {% include 'navbar.html' %}
-    {% include 'messages.html' %}
-    {% block content %}
-    <!-- Things go here -->
-    {% endblock content %}
+    <div class="navigation">
+        {% include 'navbar.html' %}
+    </div>
+    <div class="center">
+        {% include 'messages.html' %}
+        {% block content %}
+        <!-- Things go here -->
+        {% endblock content %}
+    </div>
     {% include 'footer.html' %}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
@@ -93,11 +97,14 @@ templates/main.html
 
 templates/footer.html
 ```html
-<div class="container">
-    <div class="row justify-content-center">
-        &copy; Copyright 
-        <script>document.write(new Date().getFullYear())</script>
-        Stuff goes here
+<div class="center">
+    <hr>
+    <div class="container">
+        <div class="row justify-content-center">
+            &copy; Copyright 
+            <script>document.write(new Date().getFullYear())</script>
+           Stuff goes here
+        </div>
     </div>
 </div>
 ```
@@ -117,24 +124,34 @@ templates/messages.html
 
 templates/navbar.html
 ```html
-<div class="bg-dark">
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Renrek's Repository</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a href="{% url 'home' %}" class="nav-link">Home</a>
-            </li>
-          </ul>
+{% load account %}
+<div class="center">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h2>Logo HERE</h2>
+            </div>
+            <div class="col-8">
+                <nav class="navbar navbar-expand-md">
+                    <ul class="navbar-nav ">
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="nav-link">Home</a>
+                        </li>
+                        
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>   
+            </div>
         </div>
-      </div>
-    </nav>
-  </div>
+    </div>
 </div>
 ```
 ----
@@ -150,12 +167,20 @@ import environ
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')
 ```
-1. `touch .env .env_template`
+pip freeze > requirements.txt
 
-#### .env_template
+#### .env
 ```env
 DEBUG=True
 SECRET_KEY=
+
+DATABASE_NAME=mysql
+DATABASE_USER=alice
+DATABASE_PASS=supersecretpassword
+
+GOOGLE_CLIENT_ID=
+GOOGLE_SECRET=
+GOOGLE_KEY=
 ```
 Note: Create at root of directory
 
@@ -164,7 +189,88 @@ Note: Create at root of directory
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 ```
+----
+### Change Timezone
+```python
+TIME_ZONE = 'America/Chicago'
+```
+----
+### Install allauth
 
+`pip install django-allauth`
+
+[Allauth Docs](https://django-allauth.readthedocs.io/en/latest/installation.html)
+
+##### Add to settings.py
+```python
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend' # Non production!
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email' 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
+
+AUTHENTICATION_BACKENDS = [
+    ...
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    ...
+]
+
+INSTALLED_APPS = [
+    # Site apps
+    
+    # Core apps - came with install
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Used for allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
+
+SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': env('GOOGLE_CLIENT_ID'),
+            'secret': env('GOOGLE_SECRET'),
+            'key': env('GOOGLE_KEY')
+        }
+    }
+}
+```
+##### base > urls.py
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    # Add this path
+    path('accounts/', include('allauth.urls')),
+]
+```
+1. `pip freeze > requirements.txt`
+1. `python manage.py migrate`
+
+# Copy pages from allauth to local folders.
+
+# add environ
 
 ## Create Core pages
 
@@ -185,33 +291,40 @@ def home(request):
     context = {}
     return render(request, 'core/index.html', context)
 
-def profile(request):
+def dashboard(request):
     context = {}
-    return render(request, 'core/profile.html', context)
+    return render(request, 'core/dashboard.html', context)
 ```
 
 
 #### Create File
 
-1. `mkdir core/templates core/templates/core`
-1. `touch core/urls.py core/templates/core/index.html core/templates/core/profile.html`
+1. `mdir core/templates core/templates/core core/templates/account core/templates/socialaccount`
+1. `touch core/urls.py core/templates/core/index.html core/templates/core/dashboard.html`
 
 
 ##### core/templates/core/index.html
 ```html
 {% extends 'main.html' %}
 {% load static %}
+
 {% block title %} - Home{% endblock %}
 {% block content %}
     <h1>Home</h1>
+
+    <div style="margin:auto; width: 321px;">
+        The following links are just examples of how to access account pieces.
+        <a class="nav-link" href="{% url 'account_signup' %}">Sign up</a>
+        <a class="nav-link" href="{% url 'socialaccount_connections' %}">connect</a>
+    </div>
 {% endblock content %}
 ```
-##### core/templates/core/profile.html
+##### core/templates/core/dashboard.html
 ```html
 <!-- TODO Move dashboard to app -->
 {% extends 'main.html' %}
 {% load static %}
-{% block title %}Profile{% endblock %}
+{% block title %} - Dashboard{% endblock %}
 {% block content %}
     <p>dashboard</p>
     <div>
@@ -229,9 +342,10 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name="home"),
-    path('accounts/profile/', views.profile, name="profile"),
+    path('accounts/profile/', views.dashboard, name="dashboard"),
 ]
 ```
+
 
 base/urls.py
 ```python
@@ -243,12 +357,17 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
+
 
 mysite/setting.py
 ```python
 INSTALLED_APPS = [
+    # Site apps
+    'core.apps.CoreConfig',
+
     # Core apps - came with install
     'django.contrib.admin',
     'django.contrib.auth',
@@ -257,27 +376,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Site apps
-    'core.apps.CoreConfig',
+    # Used for allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 ```
 
-touch .gitignore
-
-```git
-venv
-__pycache__
-*.pyc
-*.sqlite3
-.env
-```
-git init
-git add .
-git commit -m "initial commit"
-
-
 ## Running Dev Server
 ```shell
-migrate
 python manage.py runserver
 ```
