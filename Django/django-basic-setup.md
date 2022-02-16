@@ -1,9 +1,16 @@
 # Django Basic Setup
+*Tested with Django v4 on 2/16/22*
 
-#### Create work space
-create a temperaary virtual environment to create tidy package this is due to the the venv file not moving nice.
+Recipe to create a template for personal projects
 
-##### Creation
+### Features
+- Bootstrap 5
+- JQuery
+- .env ready
+- Simple email login
+- No registration available
+
+### File Creation
 1. `mkdir django-template`
 1. `cd django-template`
 1. `python -m venv venv`
@@ -11,19 +18,20 @@ create a temperaary virtual environment to create tidy package this is due to th
 1. `pip install Django`
 1. `django-admin startproject base`
 1. `pip install django-environ`
-
-Move files within the base directory to root directory, the overwrite of base is intentional
-
+1. Manually move files within the base directory to root directory, the overwrite of base is intentional
 1. `python manage.py startapp core`
 1. `mkdir templates static`
-1. `mkdir static/css static/img static/js .gitignore`
-1. `touch static/css/main.css static/img/.keep static/js/.keep`
-1. `mkdir core/templates core/templates/core`
-1. `touch core/urls.py core/signals.py core/templates/core/index.html core/templates/core/profile.html`
+1. `mkdir static/css static/img static/js`
+1. `touch static/css/main.css static/img/.keep static/js/.keep .gitignore`
+1. `mkdir core/templates core/templates/core core/templates/registration`
+1. `touch core/urls.py core/signals.py core/templates/core/index.html core/templates/core/profile.html core/templates/registration/login.html`
 1. `touch .env_template`
 1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
 1. `code .`
 
+
+
+### Copy into the appropriate files
 .gitignore
 ```text
 venv
@@ -86,6 +94,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
 ]
 
+AUTH_USER_MODEL = 'core.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -191,7 +200,7 @@ from django.shortcuts import render
 from django.contrib import messages
 
 def home(request):
-    messages.info(request, "Message example")
+    messages.info(request, "Message example change me in core/views.py")
     context = {}
     return render(request, 'core/index.html', context)
 
@@ -228,6 +237,39 @@ core/templates/core/profile.html
 {% endblock content %}
 ```
 
+core/templates/registration/login.html
+```html
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container">
+    {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+    {# Assumes you set up the password_reset view in your URLconf #}
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+</div>
+{% endblock %}
+```
 core/urls.py
 ```python
 from django.urls import path
@@ -249,7 +291,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 ```
 
 
@@ -311,11 +355,14 @@ class CoreConfig(AppConfig):
 
 ```
 
-
-
+### Wrap up
+1. `pip freeze > requirements.txt`
 1. `git init`
 1. `git add .`
 1. `git commit -m "initial commit"`
+
+
+### Prepare for Development
 1. `python manage.py makemigrations`
 1. `python manage.py migrate`
 1. `python manage.py runserver`
