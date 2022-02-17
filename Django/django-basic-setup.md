@@ -24,8 +24,8 @@ Recipe to create a template for personal projects
 1. `mkdir static/css static/img static/js`
 1. `touch static/css/main.css static/img/.keep static/js/.keep .gitignore`
 1. `mkdir core/templates core/templates/core core/templates/registration`
-1. `touch core/urls.py core/signals.py core/templates/core/index.html core/templates/core/profile.html core/templates/registration/login.html`
-1. `touch .env_template`
+1. `touch core/urls.py core/signals.py core/templates/core/index.html README.md`
+1. `touch core/templates/core/profile.html core/templates/registration/login.html .env_template`
 1. `touch templates/footer.html templates/main.html templates/messages.html templates/navbar.html`
 1. `code .`
 
@@ -355,6 +355,42 @@ class CoreConfig(AppConfig):
 
 ```
 
+README.md
+```text
+# Django Setup
+
+[Recommended Tutorial](https://www.djangoproject.com/start/)
+
+### Base Requirements
+ - Python 3
+ - pip
+
+### Features
+- Bootstrap 5
+- JQuery
+- .env ready
+- Simple email login
+- No registration available
+
+### Directions
+
+1. Clone repo
+1. `cd django-template`
+1. `python -m venv venv`
+1. `source  venv/Scripts/activate`
+1. `cp .env_template .env`
+1. `python manage.py makemigrations`
+1. `python manage.py migrate`
+1. `python manage.py createsuperuser`
+1. `python manage.py runserver`
+1. `code .`
+
+### File Layout
+- core/ - for base pages such as home, login, about etc
+- templates/ - base files for constructing other html files, has boiler-plate html, note that app and core have their own template folders
+- static/ - place to put css, images and javascript files
+```
+
 ### Wrap up
 1. `pip freeze > requirements.txt`
 1. `git init`
@@ -363,7 +399,9 @@ class CoreConfig(AppConfig):
 
 
 ### Prepare for Development
+1. `cp .env_template .env`
 1. `python manage.py makemigrations`
 1. `python manage.py migrate`
-1. `python manage.py runserver`
 1. `python manage.py createsuperuser`
+1. `python manage.py runserver`
+1. `code .`
