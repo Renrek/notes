@@ -17,6 +17,7 @@ Show available ports
 ```shell
 python3 -m serial.tools.list_ports
 ```
+Other commands: `dmesg | grep -i usb` or `dmesg | grep -i tty`
 
 ```python
 # Importing Libraries
