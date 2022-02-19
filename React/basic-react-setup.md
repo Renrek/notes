@@ -3,24 +3,22 @@ _Edited on - 10/29/21_
 
 
 #### Create app and install dependencies
+
+`npx create-react-app name-of-app`
+`cd name-of-app`
 ```shell
-npx create-react-app name-of-app
-cd name-of-app
-npm install redux react-redux
-npm install redux-saga
-npm install react-router-dom
-npm install redux-logger
+npm install redux react-redux redux-saga react-router-dom redux-logger
 ```
 
 #### Create app directories and core files
 ```shell
-cd src
-mkdir app components hooks redux redux/reducers redux/sagas
+mkdir src/app src/components src/hooks src/redux src/redux/reducers src/redux/sagas
+```
+```shell
 mv App* ../src/app
-cd ..
-touch src/redux/reducers/_root.reducer.js
-touch src/redux/sagas/_root.saga.js
-touch src/redux/store.js
+```
+```shell
+touch src/redux/reducers/_root.reducer.js src/redux/sagas/_root.saga.js src/redux/store.js
 ```
 
 **File: src/redux/sagas/_root.saga.js**
@@ -80,22 +78,19 @@ export default store;
 - File: src/app/App.js - Remove css import;
 - File: src/app/App.js - Delete line - import logo from './logo.svg';
 - File: src/app/App.js - Change extension - src/app/App.jsx
-- File: src/index.css - Delete file
 
 #### Install Express
 ```shell
-npm install express
+npm install express dotenv axios
+```
+```shell
 npm install nodemon --save-dev
-npm install dotenv
-npm install axios
 ```
 
 #### Create Server file structure
 ```shell
-mkdir server
-mkdir server/modules server/routes server/constants
-touch server/server.js 
-code .
+mkdir server server/modules server/routes server/constants
+touch server/server.js
 ```
 ##### Add Boiler plate server code server/server.js
 ```js
@@ -124,7 +119,6 @@ app.listen(PORT, () => {
 ##### Add to package.json
 ```json
 "proxy": "http://localhost:8081",
-
 "scripts": {
     "start": "node server/server.js",
     "build": "react-scripts build",
