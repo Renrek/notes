@@ -1,5 +1,5 @@
 # Basic React - Express Recipe
-_Edited on - 10/29/21_
+_Edited on - 2/20/2022_
 
 
 #### Create app and install dependencies
@@ -12,13 +12,42 @@ npm install redux react-redux redux-saga react-router-dom redux-logger
 
 #### Create app directories and core files
 ```shell
-mkdir src/app src/components src/hooks src/redux src/redux/reducers src/redux/sagas
+mkdir src/app src/theme src/components src/hooks src/redux src/redux/reducers src/redux/sagas src/components/Home
 ```
 ```shell
 mv App* ../src/app
 ```
 ```shell
-touch src/redux/reducers/_root.reducer.js src/redux/sagas/_root.saga.js src/redux/store.js
+touch src/redux/reducers/_root.reducer.js src/redux/sagas/_root.saga.js src/redux/store.js src/theme/theme.js src/components/Home.jsx
+```
+
+**File: src/index.js**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
+import App from './app/App';
+import reportWebVitals from './reportWebVitals';
+
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
 ```
 
 **File: src/redux/sagas/_root.saga.js**
@@ -26,7 +55,7 @@ touch src/redux/reducers/_root.reducer.js src/redux/sagas/_root.saga.js src/redu
 import { all } from 'redux-saga/effects';
 // import exampleSaga from './example.saga';
 
-export function* rootSaga(){
+export default function* rootSaga(){
     yield all([
         // exampleSaga(),
     ]);
@@ -69,15 +98,51 @@ sagaMiddleware.run(rootSaga);
 
 export default store;
 ```
-**File adjustments**
 
+**File: src/app/App.jsx**
+```js
+import React from 'react';
+import { Routes, Route} from "react-router-dom";
+
+import Home from '../components/Home/Home';
+
+function App() {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+```
+
+**File src/components/Home/Home.jsx**
+```js
+import React from 'react';
+import { Link }  from 'react-router-dom';
+
+const Home = () => {
+    return (
+        <>
+            <nav>
+                <Link to="/">Home</Link>
+            </nav>
+        </>
+    );
+}
+
+export default Home;
+```
+
+**File adjustments**
+Note: contemplating on leaving them....
 - File: src/index.css - Delete file
-- File: src/index.js - Remove css import;
-- File: src/index.js - Alter line - import App from './app/App';
+
 - File: src/app/App.css - Delete file';
-- File: src/app/App.js - Remove css import;
-- File: src/app/App.js - Delete line - import logo from './logo.svg';
-- File: src/app/App.js - Change extension - src/app/App.jsx
+
 
 #### Install Express
 ```shell
