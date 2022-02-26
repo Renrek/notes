@@ -1,62 +1,61 @@
-https://github.com/nodesource/distributions
-su -
-cd ~
-apt install curl
-curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
-nano nodesource_setup.sh
-chmod +x nodesource_setup.sh
-./nodesource_setup.sh
-sudo apt install nodejs
+# Deploy React - Express App on Debian
+*Tested on Debian 11 - 2/26/22*
+
+Make sure to do the [Debian Base Configuration](https://github.com/renrek/notes/blob/main/Debian/debian-base-configuration.md) first.
+
+Make sure express.js is configured for port 5000 and static is set to './build'.
+
+Port 80 does not open for not root users, so we wil do port forwarding.
+
+### Install NodeJs
+
+This process gets the latest node installed on the server - [NodeSource Info](https://github.com/nodesource/distributions).
+
+1. `su -`
+1. `cd ~`
+1. `apt install curl`
+1. `curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh`
+1. `chmod +x nodesource_setup.sh`
+1. `./nodesource_setup.sh`
+1. `apt install nodejs`
+1. `mkdir /srv/www /srv/www/express`
+1. `exit`
+
+### Transfer files from repo
+
+Use any method you like scp, ftp, but only move public, server, src, package.json, and package-lock.json to /srv/www/express.
+
+1. `sudo npm install`
+1. `sudo npm run build`
+1. `sudo mv build server/`
+1. `sudo chown www-data:www-data -R /srv/www`
 
 
-<!-- need to add filepermissions -->
+### Setting up express.js as a service
 
-nano .bashrc
-HUB_ADDRESS=
-HUE_APPLICATION_KEY=
+Verify Nodejs location with the command: `which node`
 
-ufw allow 80
-set
-
-which node should get you binary path else nodejs
-should be /user/bin/node
-
-cd /lib/systemd/system
-
-sudo nano /lib/systemd/system/react-app.service
+Create a service file: `sudo nano /lib/systemd/system/express.service`
 
 ```ini
 [Unit]
-Description=Light remote website
-Documentation=http://light-remote.lan.renrek.com
+Description=Express
+Documentation= React Web-app
 After=network.target
 
 [Service]
-Environment=NODE_ENV=production
-Environment=HUB_ADDRESS=172.20.0.20
-Environment=HUE_APPLICATION_KEY=r2HbBXh5GN-FpyVZGOU0uDR0pv3mjTLUAok3KyI4
 Type=simple
-User=root
-ExecStart=/usr/bin/node /light-remote.lan.renrek.com/server/server.js
-Restart=on-failure
 
-[Install]
-WantedBy=multi-user.target
-```
+# user and group starting the app 
+# DO NOT USE ROOT!
+User=www-data
+Group=www-data
 
-$ sudo systemctl daemon-reload
-
-
-```ini
-[Unit]
-Description=My super nodejs app
-
-[Service]
 # set the working directory to have consistent relative paths
-WorkingDirectory=/var/www/app
+WorkingDirectory=/srv/www/express/server
 
 # start the server file (file is relative to WorkingDirectory here)
-ExecStart=/usr/bin/node serverCluster.js
+ExecStart=/usr/bin/node server.js
 
 # if process crashes, always try to restart
 Restart=always
@@ -64,22 +63,54 @@ Restart=always
 # let 500ms between the crash and the restart
 RestartSec=500ms
 
-# send log tot syslog here (it doesn't compete with other log config in the app itself)
+# Setup logging
 StandardOutput=syslog
 StandardError=syslog
+SyslogIdentifier=express
 
-# nodejs process name in syslog
-SyslogIdentifier=nodejs
-
-# user and group starting the app
-User=www-data
-Group=www-data
-
-# set the environement (dev, prod…)
+# Add Environment Variables here
 Environment=NODE_ENV=production
 
-
 [Install]
-# start node at multi user system level (= sysVinit runlevel 3) 
 WantedBy=multi-user.target
 ```
+
+1. `ufw allow 5000`
+1. `sudo systemctl daemon-reload` Note: use this command anytime you edit service.
+1. `sudo systemctl enable express`
+1. `sudo systemctl start express`
+
+View Status: 
+`sudo systemctl status express` or `sudo journalctl -u express.service`
+
+You should be able to preview the site by going to http://hostNameOrIP:5000
+
+### Forward requests to port 80 to 5000
+
+Should work without opening port 80, but open it anyway: `sudo ufw allow 80`
+
+Alter the default forward policy: `sudo nano /etc/default/ufw`
+
+```text
+DEFAULT_FORWARD_POLICY="ACCEPT"
+```
+
+Insert forwarding rule: `sudo nano /etc/ufw/before.rules`
+```
+#   ufw-before-forward
+#
+
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
+COMMIT
+
+# Don't delete these required lines, otherwise there will be errors
+*filter
+```
+
+1. `sudo ufw disable`
+1. `sudo ufw enable`
+1. `sudo ufw status`
+
+Lastly enjoy your site naturally.
