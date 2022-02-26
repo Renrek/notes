@@ -1,7 +1,7 @@
 # Deploy Django on Debian
 *Tested debian 10, 11 and Ubuntu Server 20ish*
 
-Make sure to do the [Debian Base Configuration](https://github.com/example/notes/blob/53442a63853252db4fd410f6985419578d15d8b3/Debian/debian-base-configuration.md#L22) first if using debian.
+Make sure to do the [Debian Base Configuration](https://github.com/renrek/notes/blob/main/Debian/debian-base-configuration.md) first if using debian.
 
 ## Install necessary packages
 ```shell
