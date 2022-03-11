@@ -46,7 +46,7 @@ sudo nano /etc/apache2/sites-available/example.com.conf
 
         WSGIDaemonProcess djangoapache python-home=/var/www/django/venv python-path=/var/www/django
         WSGIProcessGroup djangoapache
-        WSGIScriptAlias /django /var/www/django/wonderkow/wsgi.py
+        WSGIScriptAlias /django /var/www/django/base/wsgi.py
 
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
