@@ -18,7 +18,7 @@ sudo apt install ca-certificates
 cd /opt
 sudo ln -s /usr/games/steamcmd steamcmd
 ```
-
+https://developer.valvesoftware.com/wiki/Dedicated_Servers_List
 
 ?? sudo apt-get install lib32gcc1
 
