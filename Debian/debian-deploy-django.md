@@ -6,9 +6,15 @@ Make sure to do the [Debian Base Configuration](https://github.com/renrek/notes/
 ## Install necessary packages
 ```shell
 apt install python3 python3-virtualenv virtualenv python3-venv python3-pip
-apt install apache2 libapache2-mod-wsgi-py3
+apt install apache2 libapache2-mod-wsgi-py3 mysql-server
+apt install python3-dev default-libmysqlclient-dev build-essential
 ```
 
+## Create Database and Grant access
+```sql
+CREATE USER 'django'@localhost IDENTIFIED BY 'my_super_secure_password';
+GRANT CREATE, ALTER, INDEX, SELECT, UPDATE, INSERT, DELETE, REFERENCES ON db.* TO django@localhost;
+```
 
 ## Copy files over
 ```shell
@@ -27,11 +33,7 @@ sudo nano /etc/apache2/sites-available/example.com.conf
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
 
-        DocumentRoot /var/www/html
-        <Directory /var/www/html>
-                AllowOverride All
-                Require all granted
-        </Directory>
+        DocumentRoot /var/www/django
 
         <Directory /var/www/django>
                 <Files wsgi.py>
@@ -39,19 +41,17 @@ sudo nano /etc/apache2/sites-available/example.com.conf
                 </Files>
         </Directory>
 
-        Alias /django/static/ /var/www/django/static/
+        Alias /static/ /var/www/django/static/
         <Directory /var/www/django/static>
                 Require all granted
         </Directory>
 
         WSGIDaemonProcess djangoapache python-home=/var/www/django/venv python-path=/var/www/django
         WSGIProcessGroup djangoapache
-        WSGIScriptAlias /django /var/www/django/wonderkow/wsgi.py
+        WSGIScriptAlias / /var/www/django/base/wsgi.py
 
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-
 </VirtualHost>
 ```
 
