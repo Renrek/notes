@@ -21,6 +21,7 @@ This process gets the latest node installed on the server - [NodeSource Info](ht
 1. `mkdir /srv/www /srv/www/express`
 1. `exit`
 
+- versions available at nodesource : 18.x 17.x 16.x 14.x
 ### Transfer files from repo
 
 Use any method you like scp, ftp, but only move public, server, src, package.json, and package-lock.json to /srv/www/express.
