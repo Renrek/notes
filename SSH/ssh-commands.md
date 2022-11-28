@@ -24,3 +24,8 @@ exec ssh-agent bash
 ```shell
 ssh-add id_rsa
 ```
+
+## Removing entries from known_hosts
+```shell
+ssh-keygen -R <ip or hostname>
+```
