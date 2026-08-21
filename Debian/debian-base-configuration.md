@@ -1,5 +1,5 @@
 # Debian Base Configuration
-*Version: Debian 11 - Bullseye*
+*Version: Debian 13 - Trixie
 
 When installing debian I use the net install iso and install just the operating system. I intentionally manually install everything that I will use to ensure only what is needed is on the system.
 
@@ -11,8 +11,9 @@ apt install sudo
 usermod -aG sudo <username>
 ```
 
-## Setup Static Address
+## Setup Static Address 
 ```shell
+apt install resolvconf
 nano /etc/network/interfaces
 ```
 
@@ -23,9 +24,14 @@ iface ens18 inet static
         broadcast 172.22.255.255
         netmask 255.255.0.0
         gateway 172.22.0.1
-        dns-nameserver 8.8.8.8
-        dns-nameserver 8.8.4.4
+        dns-nameservers 8.8.8.8 8.8.4.4 172.22.0.2 172.22.0.3
 
+```
+
+```shell
+ifdown ens18 && ifup ens18
+resolvconf -u
+ip -br a
 ```
 
 ## Firewall Setup - UFW
