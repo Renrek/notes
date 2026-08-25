@@ -35,8 +35,8 @@ sudo nano /etc/apache2/sites-available/subdomain.yourdomain.com.conf
 
     ProxyPreserveHost On
     ProxyPass /.well-known !
-    ProxyPass / http://10.1.1.11:80/
-    ProxyPassReverse / http://10.1.1.11:80/
+    ProxyPass / http://172.22.0.11:80/
+    ProxyPassReverse / http://172.22.0.11:80/
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
@@ -52,8 +52,8 @@ sudo nano /etc/apache2/sites-available/subdomain.yourdomain.com.conf
     SSLCertificateKeyFile /etc/letsencrypt/live/subdomain.yourdomain.com/privkey.pem
 
     ProxyPreserveHost On
-    ProxyPass / http://10.1.1.11:80/
-    ProxyPassReverse / http://10.1.1.11:80/
+    ProxyPass / http://172.22.0.11:80/
+    ProxyPassReverse / http://172.22.0.11:80/
 </VirtualHost>
 ```
 
@@ -108,8 +108,8 @@ sudo nano /etc/apache2/sites-available/app.example.com.conf
 
     ProxyPreserveHost On
     ProxyPass /.well-known !
-    ProxyPass / http://172.20.2.111:80/
-    ProxyPassReverse / http://172.20.2.111:80/
+    ProxyPass / http://172.22.0.21:80/
+    ProxyPassReverse / http://172.22.0.21:80/
 
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
@@ -125,8 +125,8 @@ sudo nano /etc/apache2/sites-available/app.example.com.conf
     SSLCertificateKeyFile /etc/letsencrypt/live/app.example.com/privkey.pem
 
     ProxyPreserveHost On
-    ProxyPass / http://172.20.2.111:80/
-    ProxyPassReverse / http://172.20.2.111:80/
+    ProxyPass / http://172.22.0.21:80/
+    ProxyPassReverse / http://172.22.0.21:80/
 </VirtualHost>
 ```
 
