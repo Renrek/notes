@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  wg-easy:
+    image: ghcr.io/wg-easy/wg-easy
+    container_name: wg-easy
+    environment:
+      # Change this to your actual custom domain
+      - WG_HOST=wholetthedogsout.com
+      # Dockge will pull this from the .env tab safely
+      - PASSWORD_HASH=${PASSWORD_HASH}
+      # Optional: Set your home lab's local DNS server (like Pi-hole or your router)
+      - WG_DEFAULT_DNS=192.168.1.62
+      # Tell wg-easy what subnets remote clients are allowed to talk to
+      - WG_ALLOWED_IPS=192.168.1.0/24
+    volumes:
+      # Creates a clean, persistent folder right inside this Dockge stack directory
+      - ./wireguard_data:/etc/wireguard
+    ports:
+      - 51820:51820/udp # WireGuard VPN Port
+      - 51821:51821/tcp # Web UI Dashboard Port
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+networks: {}
